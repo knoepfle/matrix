@@ -42,7 +42,14 @@ public:
     BasicRoutingInterface(QueryDataT & qd) : _queryData(qd) { }
     virtual ~BasicRoutingInterface(){ };
 
-    inline void RoutingStep(typename QueryDataT::QueryHeap & _forwardHeap, typename QueryDataT::QueryHeap & _backwardHeap, NodeID *middle, int *_upperbound, const int edgeBasedOffset, const bool forwardDirection) const {
+	int Match(typename QueryDataT::QueryHeap & _forwardHeap, typename QueryDataT::QueryHeap & _backwardHeap, NodeID *middle, int *_upperbound) const {
+		//int dist = _forwardHeap.smallest_match_unsorted(_backwardHeap,middle);
+		int dist2 = _forwardHeap.smallest_match(_backwardHeap,middle);
+		//printf("dists unsorted %d, sorted %d\n", dist,dist2);
+		return dist2;
+	} 
+
+    inline void RoutingStep(typename QueryDataT::QueryHeap & _forwardHeap, typename QueryDataT::QueryHeap & _backwardHeap, NodeID *middle, int *_upperbound, const int edgeBasedOffset, const bool forwardDirection, const bool stopwhenfound=true) const {
         const NodeID node = _forwardHeap.DeleteMin();
         const int distance = _forwardHeap.GetKey(node);
         //SimpleLogger().Write() << "Settled (" << _forwardHeap.GetData( node ).parent << "," << node << ")=" << distance;
@@ -57,10 +64,12 @@ public:
             }
         }
 
-        if(distance-edgeBasedOffset > *_upperbound){
-            _forwardHeap.DeleteAll();
-            return;
-        }
+		if(stopwhenfound==true) { 
+        	if(distance-edgeBasedOffset > *_upperbound){
+            	_forwardHeap.DeleteAll();
+            	return;
+        	}
+		} 
 
         //Stalling
         for ( typename QueryDataT::Graph::EdgeIterator edge = _queryData.graph->BeginEdges( node ); edge < _queryData.graph->EndEdges(node); ++edge ) {

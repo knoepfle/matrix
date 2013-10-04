@@ -27,7 +27,8 @@ SearchEngine::SearchEngine(
     ) :
         _queryData(g, nh, n),
         shortestPath(_queryData),
-        alternativePaths(_queryData)
+        alternativePaths(_queryData),
+        matrixRouting(_queryData)
     {}
     SearchEngine::~SearchEngine() {}
 

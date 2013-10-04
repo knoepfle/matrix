@@ -28,6 +28,7 @@ or see http://www.gnu.org/licenses/agpl.txt.
 #include "SearchEngineData.h"
 #include "../RoutingAlgorithms/AlternativePathRouting.h"
 #include "../RoutingAlgorithms/ShortestPathRouting.h"
+#include "../RoutingAlgorithms/MatrixRouting.h"
 
 #include "../Util/StringUtil.h"
 #include "../typedefs.h"
@@ -43,6 +44,7 @@ private:
 public:
     ShortestPathRouting<SearchEngineData> shortestPath;
     AlternativeRouting<SearchEngineData> alternativePaths;
+    MatrixRouting<SearchEngineData> matrixRouting;
 
     SearchEngine(
         QueryGraph * g,

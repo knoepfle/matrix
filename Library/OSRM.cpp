@@ -94,6 +94,7 @@ OSRM::OSRM(const char * server_ini_path) {
     RegisterPlugin(new NearestPlugin(objects));
     RegisterPlugin(new TimestampPlugin(objects));
     RegisterPlugin(new ViaRoutePlugin(objects));
+    RegisterPlugin(new MatrixPlugin(objects));
 }
 
 OSRM::~OSRM() {

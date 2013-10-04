@@ -125,6 +125,14 @@ public:
         return static_cast<Key>( heap.size() - 1 );
     }
 
+
+	// sort and throw away nodeIndex
+	void Transform(void)
+	{
+		std::sort(insertedNodes.begin(),insertedNodes.end());
+		nodeIndex.Clear();
+	}
+
     void Insert( NodeID node, Weight weight, const Data &data ) {
         HeapElement element;
         element.index = static_cast<NodeID>(insertedNodes.size());
@@ -196,6 +204,36 @@ public:
         CheckHeap();
     }
 
+	int smallest_match(BinaryHeap &other, NodeID *middle)
+	{
+		int min = INT_MAX;
+		unsigned int x,y;
+
+		x=0;
+		y=0;
+		while (x< insertedNodes.size() && y<other.insertedNodes.size()) { 
+			NodeID node1 = insertedNodes[x].node;
+			NodeID node2 = other.insertedNodes[y].node;
+			//printf("%d,%d\n", node1, node2);
+			if (node1 == node2) { 
+				int dist1 = insertedNodes[x].weight;
+				int dist2 = other.insertedNodes[y].weight;
+			//printf(" distances %d,%d (%d)\n", dist1, dist2, min);
+				if (dist1 + dist2 < min) { 
+					 min = dist1+dist2;
+					*middle = node1;
+				} 
+				x++;
+				y++;
+			} else if (node1 < node2) { 
+				x++;
+			} else {
+				y++;
+			} 
+		} 
+		return min;
+	}
+
 private:
     class HeapNode {
     public:
@@ -204,6 +242,11 @@ private:
         HeapNode( NodeID n, Key k, Weight w, Data d )
         : node( n ), key( k ), weight( w ), data( d ) {
         }
+
+		bool operator < (const class HeapNode b) const
+		{
+			return this->node < b.node;
+		}
 
         NodeID node;
         Key key;
@@ -214,6 +257,7 @@ private:
         Key index;
         Weight weight;
     };
+
 
     std::vector< HeapNode > insertedNodes;
     std::vector< HeapElement > heap;
@@ -256,6 +300,12 @@ private:
         heap[key].weight = weight;
         insertedNodes[risingIndex].key = key;
     }
+bool idsort (void * i,void *j) {
+	HeapNode *I=i;
+	HeapNode *J=j;
+	 return (i<j); 
+}
+
 
     void CheckHeap() {
 #ifndef NDEBUG
