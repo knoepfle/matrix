@@ -73,7 +73,7 @@ public:
     std::string GetVersionString() const { return std::string("0.3 (DL)"); }
     void HandleRequest(const RouteParameters & routeParameters, http::Reply& reply) {
         //check number of parameters
-        if( 2 > routeParameters.coordinates.size() || 500 < routeParameters.coordinates.size()) {
+        if( 2 > routeParameters.coordinates.size() || INT_MAX < routeParameters.coordinates.size()) {
             reply = http::Reply::stockReply(http::Reply::badRequest);
             return;
         }
