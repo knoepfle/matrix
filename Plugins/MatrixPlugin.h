@@ -134,7 +134,7 @@ public:
 		times << ']';
 
 		reply.content += "[{\"version\": 0.3,\"status\":0,\"status_message\": \"Found matrix\"";
-        reply.content += ",time_matrix:" + times.str();
+        reply.content += ",\"time_matrix\":" + times.str();
 		reply.content += "}]";
 
         if("" != routeParameters.jsonpParameter) {
